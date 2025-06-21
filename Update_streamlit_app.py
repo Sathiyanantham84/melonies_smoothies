@@ -16,7 +16,7 @@ st.write('The Name of your smoothie will be:',name_on_order)
 cnx = st.connection("snowflake") 
 session = cnx.session()
 
-
+# Convert the Snowpark Dataframe to a Pandas Dataframe so we can use the LOC function# 
 #my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'),col('SEARCH_ON'))
 pd_df=my_dataframe.to_pandas()
@@ -34,7 +34,12 @@ if Ingredients_list:
 
     for fruit_chosen in Ingredients_list:
         Ingredients_string += fruit_chosen + '  '
-        st.subheader(fruit_chosen + ' Nutrition Information')
+
+        search_on=pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
+        st.write('The search value for ', fruit_chosen,' is ', search_on, '.')
+
+        st.subheader(fruit_chosen + ' Nutrition Information')            
+        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_chosen)
         smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
         sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
 
