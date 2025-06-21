@@ -30,7 +30,7 @@ if Ingredients_list:
     #st.write(Ingredients_list)
     #st.text(Ingredients_list)
 
-    Ingredients_string = ' '
+    Ingredients_string = ''
 
     for fruit_chosen in Ingredients_list:
         Ingredients_string += fruit_chosen + ' '
